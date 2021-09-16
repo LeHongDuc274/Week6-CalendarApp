@@ -5,11 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white_two"
     tools:context=".MonthFragment">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tool_bar_main"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:background="@drawable/ic_componente_6_7"
+        android:scaleY="1.2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,15 +23,19 @@
             android:layout_height="match_parent"
             >
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="30sp"
+                android:textColor="#121212"
+                android:fontFamily="@font/ralewayblack"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:text="MyCalendar"
                 />
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
     <LinearLayout
         android:id="@+id/ll_month"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="20dp"
         android:orientation="horizontal"
@@ -37,12 +44,15 @@
         app:layout_constraintTop_toBottomOf="@+id/tool_bar_main">
 
         <TextView
+            android:background="@drawable/shape_month"
             android:id="@+id/tv_month"
+            android:padding="8dp"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/purple_500"
+            android:fontFamily="@font/ralewaylight"
+            android:textColor="#151515"
             android:maxLines="1"
             android:text="November"
             android:textSize="30sp" />
@@ -52,6 +62,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginTop="24dp"
         android:id="@+id/rv_day_of_week"
+        android:background="@drawable/shape_day_week"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
@@ -67,14 +78,14 @@
         android:id="@+id/ll_day_of_month"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/shape_calendar"
         app:layout_constraintDimensionRatio="7:5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rv_day_of_week">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:background="@drawable/shape_calendar"
+            android:padding="3dp"
             android:id="@+id/rv_day_of_month"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

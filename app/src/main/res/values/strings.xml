@@ -2,8 +2,8 @@
     <string name="app_name">calendarApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="color_tv_checked">#FF3700B3</string>
-    <string name="color_background_item_checked">#FFFFFFFF</string>
+    <string name="color_tv_checked">#FF000000</string>
+    <string name="color_background_item_checked">#f56edb</string>
     <string name="color_tv_normal">#FF000000</string>
-    <string name="color_background_item_normal">#0DED8C</string>
+    <string name="color_background_item_normal">#ffffff</string>
 </resources>

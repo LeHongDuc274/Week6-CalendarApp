@@ -5,6 +5,8 @@
       <map>
         <entry key="..\:/Trainning/W6/trainningW6/Week6-CalendarApp/app/src/main/res/drawable/divider_item.xml" value="0.13541666666666666" />
         <entry key="..\:/Trainning/W6/trainningW6/Week6-CalendarApp/app/src/main/res/drawable/shape_calendar.xml" value="0.215625" />
+        <entry key="..\:/Trainning/W6/trainningW6/Week6-CalendarApp/app/src/main/res/drawable/shape_day_week.xml" value="0.1" />
+        <entry key="..\:/Trainning/W6/trainningW6/Week6-CalendarApp/app/src/main/res/drawable/shape_month.xml" value="0.1" />
         <entry key="..\:/Trainning/W6/trainningW6/Week6-CalendarApp/app/src/main/res/layout/activity_main.xml" value="0.19947916666666668" />
         <entry key="..\:/Trainning/W6/trainningW6/Week6-CalendarApp/app/src/main/res/layout/fragment_calendar_pager.xml" value="0.19947916666666668" />
         <entry key="..\:/Trainning/W6/trainningW6/Week6-CalendarApp/app/src/main/res/layout/fragment_month.xml" value="0.2" />

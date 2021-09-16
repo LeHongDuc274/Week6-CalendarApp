@@ -74,7 +74,6 @@ class MonthFragment() : Fragment() {
             adapter = calendarAdapter
             layoutManager = GridLayoutManager(requireContext(), 7)
             addItemDecoration(divider2)
-            addItemDecoration(divider1)
         }
     }
     private fun setupMenu(toolBar: Toolbar?) {
