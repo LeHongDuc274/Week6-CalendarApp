@@ -1,12 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".MonthFragment">
-
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tool_bar_main"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu_setting_start_day"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MyCalendar"
+                />
+        </LinearLayout>
+    </androidx.appcompat.widget.Toolbar>
     <LinearLayout
         android:id="@+id/ll_month"
         android:layout_width="match_parent"
@@ -15,85 +34,34 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/tool_bar_main">
 
         <TextView
             android:id="@+id/tv_month"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:maxLines="1"
             android:gravity="center"
+            android:textColor="@color/purple_500"
+            android:maxLines="1"
             android:text="November"
             android:textSize="30sp" />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:paddingVertical="8dp"
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_marginTop="24dp"
-        android:id="@+id/ll_weeks"
-        android:background="@drawable/shape_calendar"
+        android:id="@+id/rv_day_of_week"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:adjustViewBounds="true"
+        app:layout_constrainedHeight="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_month">
+        app:layout_constraintTop_toBottomOf="@+id/ll_month"
+        app:spanCount="7" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Su" />
 
-        <TextView
-            android:layout_width="wrap_content"
-
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Mo" />
-
-        <TextView
-            android:layout_width="wrap_content"
-
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Tu" />
-
-        <TextView
-            android:layout_width="wrap_content"
-
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="We" />
-
-        <TextView
-            android:layout_width="wrap_content"
-
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Th" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Fr" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Sa" />
-    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ll_day_of_month"
@@ -101,11 +69,10 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/shape_calendar"
+        app:layout_constraintDimensionRatio="7:5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_weeks"
-        app:layout_constraintDimensionRatio="7:5"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/rv_day_of_week">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_day_of_month"

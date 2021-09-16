@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:textSize="25sp"
         android:text="1"
+        android:textColor="@color/purple_700"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

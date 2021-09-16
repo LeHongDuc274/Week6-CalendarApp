@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/su"
+        android:title="Su"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/mo"
+        android:title="Mo"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/tu"
+        android:title="Tu"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/we"
+        android:title="We"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/th"
+        android:title="Th"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/fr"
+        android:title="Fr"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/sa"
+        android:title="Sa"
+        app:showAsAction="never" />
+</menu>

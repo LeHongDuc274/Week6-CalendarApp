@@ -1,5 +1,6 @@
 package com.example.calendarapp
 
+import android.util.Log
 import com.example.calendarapp.models.DayInMonth
 import java.util.*
 
@@ -8,7 +9,7 @@ class MyCalendar(date: Date) {
         const val DAYS_OF_WEEK = 7
         const val MAX_WEEK_OF_MONTH = 6
     }
-
+    var startDay = 1
     val calendar = Calendar.getInstance()
     var dayOfPrevMonth = 0
     var dayOfNextMonth = 0
@@ -24,8 +25,8 @@ class MyCalendar(date: Date) {
         calendar.set(Calendar.DATE, 1)
         dayOfCurrentMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
 
-        dayOfPrevMonth = calendar.get(Calendar.DAY_OF_WEEK) - 1
-
+        dayOfPrevMonth = calendar.get(Calendar.DAY_OF_WEEK) - startDay // 1->7//sunday->satuday
+        Log.e("dayOfPrevMonth",dayOfPrevMonth.toString())
         getDayOfPrevMonth(calendar.clone() as Calendar)
         getDayOfCurrentMonth(calendar)
         dayOfNextMonth = MAX_WEEK_OF_MONTH * DAYS_OF_WEEK - (dayOfPrevMonth + dayOfCurrentMonth)

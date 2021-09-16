@@ -2,7 +2,12 @@ package com.example.calendarapp
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
+import android.widget.Toolbar
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -15,20 +20,22 @@ class MainActivity : FragmentActivity() {
     private lateinit var viewPager: ViewPager2
     private lateinit var adapter: FragmentCollectionAdapter
     private lateinit var localDate: LocalDate
-
+    lateinit var fragmentCollectionAdapter : FragmentCollectionAdapter
+    var startDay = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewPager = findViewById(R.id.viewPager)
+
         initViews()
     }
-    fun initViews(){
 
-        val fragmentCollectionAdapter = FragmentCollectionAdapter(this)
+    fun initViews() {
+        fragmentCollectionAdapter = FragmentCollectionAdapter(this)
         viewPager.adapter = fragmentCollectionAdapter
-       fragmentCollectionAdapter.apply {
-           viewPager.setCurrentItem(this.firstElementPosition,false)
-       }
+        fragmentCollectionAdapter.apply {
+            viewPager.setCurrentItem(this.firstElementPosition, false)
+        }
     }
 }
