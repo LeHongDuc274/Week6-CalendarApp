@@ -26,9 +26,10 @@ class MyCalendar(date: Date) {
         dateList.clear()
         calendar.set(Calendar.DATE, 1)
         dayOfCurrentMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
-
-        dayOfPrevMonth = calendar.get(Calendar.DAY_OF_WEEK) - startDay // 1->7//sunday->satuday
-        Log.e("dayOfPrevMonth", dayOfPrevMonth.toString())
+        if(calendar.get(Calendar.DAY_OF_WEEK) >= startDay) {
+            dayOfPrevMonth = calendar.get(Calendar.DAY_OF_WEEK) - startDay // 1->7//sunday->satuday
+        }   else  dayOfPrevMonth = calendar.get(Calendar.DAY_OF_WEEK) - startDay + 7
+      //  Log.e("dayOfPrevMonth", dayOfPrevMonth.toString())
         getDayOfPrevMonth(calendar.clone() as Calendar)
         getDayOfCurrentMonth(calendar)
         dayOfNextMonth = MAX_WEEK_OF_MONTH * DAYS_OF_WEEK - (dayOfPrevMonth + dayOfCurrentMonth)

@@ -6,4 +6,5 @@
     <string name="color_background_item_checked">#f56edb</string>
     <string name="color_tv_normal">#FF000000</string>
     <string name="color_background_item_normal">#ffffff</string>
+    <string name="color_background_item_checked_doubleclick">#950A1B</string>
 </resources>

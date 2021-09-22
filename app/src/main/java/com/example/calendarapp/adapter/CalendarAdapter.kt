@@ -3,10 +3,10 @@ package com.example.calendarapp.adapter
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -20,19 +20,21 @@ import java.util.*
 
 class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
     RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    }
-
     lateinit var context: Context
+    var endCurMonth = 0
+    var startCurMonth = 0
     var dateList = arrayListOf<DayInMonth>()
     var myCalendar = MyCalendar(date)
     var checkedPosition = -1
-
+    var colorChecked = Color.YELLOW
+    var colorUnChecked = Color.WHITE
     fun setDayStart(start: Int) {
         myCalendar.startDay = start
         myCalendar.initCalendar()
         dateList = myCalendar.dateList
+        startCurMonth = myCalendar.dayOfPrevMonth
+        endCurMonth = dateList.size - myCalendar.dayOfNextMonth - 1
+       // Log.e("tagg",startCurMonth.toString() + "  " + endCurMonth.toString())
         notifyDataSetChanged()
     }
 
@@ -47,46 +49,46 @@ class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
         context = holder.itemView.context
         val tvDay = holder.itemView.findViewById<TextView>(R.id.tv_item_day)
         val height = llDayOfMonth.height / 6
-        val startCurMonth = myCalendar.dayOfPrevMonth
-        val endCurMonth = dateList.size - myCalendar.dayOfNextMonth - 1
+
         var mPos = holder.adapterPosition
         //setText
         tvDay.text = dateList[position].value.toString()
         tvDay.layoutParams.height = height
-        //setColor next-prevMonth
-        if (checkedPosition == mPos) {
-            tvDay.setTextColor(Color.parseColor(context.getString(R.string.color_tv_checked)))
-            holder.itemView.setBackgroundColor(Color.parseColor(context.getString(R.string.color_background_item_checked)))
-        } else {
-            tvDay.setTextColor(Color.parseColor(context.getString(R.string.color_tv_normal)))
-            holder.itemView.setBackgroundColor(Color.parseColor(context.getString(R.string.color_background_item_normal)))
-        }
+
         if (mPos < startCurMonth || mPos > endCurMonth) {
             tvDay.setTextAppearance(R.style.TextOtherMonth)
+        } else tvDay.setTextAppearance(R.style.TextCurMonth)
+        if (checkedPosition == mPos) {
+            holder.itemView.setBackgroundColor(colorChecked)
+        } else {
+            holder.itemView.setBackgroundColor(colorUnChecked)
         }
+
         //double click
         val doubleClick = DoubleClick(object : DoubleClickListener {
             override fun onSingleClickEvent(view: View?) {
                 if (checkedPosition != mPos) {
                     checkedPosition = mPos
+                    colorChecked = Color.GREEN
                     notifyDataSetChanged()
-                    Log.e("SingleClick", "y")
+                 //   Log.e("SingleClick", "y")
                 }
             }
-
             override fun onDoubleClickEvent(view: View?) {
                 if (checkedPosition != mPos) {
                     checkedPosition = mPos
+                    colorChecked = Color.RED
                     notifyDataSetChanged()
-                    Log.e("doubleClick", "y")
+                  //  Log.e("doubleClick", "y")
                 }
             }
         })
+         holder.itemView.setOnClickListener(doubleClick)
 
-        holder.itemView.setOnClickListener(doubleClick)
     }
-
     override fun getItemCount(): Int {
         return dateList.size
+    }
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 }
