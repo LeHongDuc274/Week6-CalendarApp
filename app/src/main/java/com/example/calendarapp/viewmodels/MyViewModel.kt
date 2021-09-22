@@ -7,5 +7,7 @@ import androidx.lifecycle.ViewModel
 class MyViewModel : ViewModel() {
     var _startDay = MutableLiveData<Int>(1)
     private val startDay : LiveData<Int> = _startDay
-
+    var _otherDayChecked = MutableLiveData<Int>(-1)
+    private val otherDayChecked: LiveData<Int> = _otherDayChecked
+    var _otherMonthChecked = MutableLiveData<Int>(-1)
 }

@@ -44,7 +44,19 @@ class MonthFragment() : Fragment() {
             calendarAdapter.notifyDataSetChanged()
            // Log.e("vm", it.toString())
         }
+        viewmodel._otherDayChecked.observe(viewLifecycleOwner){
+            if(it!=-1 && viewmodel._otherMonthChecked.value==calendarAdapter.curMonth){
+                calendarAdapter.checkedPosition = -1
+                calendarAdapter.notifyDataSetChanged()
+            }
+        }
         return view
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewmodel._otherDayChecked.value = calendarAdapter.checkedPosition
+        viewmodel._otherMonthChecked.value = calendarAdapter.curMonth
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -117,4 +129,6 @@ class MonthFragment() : Fragment() {
             add("Sa")
         }
     }
+
+
 }

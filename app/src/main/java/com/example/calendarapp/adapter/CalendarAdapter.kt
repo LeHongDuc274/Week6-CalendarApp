@@ -22,6 +22,7 @@ class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
     RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
     lateinit var context: Context
     var endCurMonth = 0
+    var curMonth = 0
     var startCurMonth = 0
     var dateList = arrayListOf<DayInMonth>()
     var myCalendar = MyCalendar(date)
@@ -31,6 +32,7 @@ class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
     fun setDayStart(start: Int) {
         myCalendar.startDay = start
         myCalendar.initCalendar()
+        curMonth = myCalendar.month
         dateList = myCalendar.dateList
         startCurMonth = myCalendar.dayOfPrevMonth
         endCurMonth = dateList.size - myCalendar.dayOfNextMonth - 1
