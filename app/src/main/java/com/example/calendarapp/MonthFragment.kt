@@ -47,12 +47,13 @@ class MonthFragment() : Fragment() {
     }
 
     private fun observeCheckedDay() {
-        calendarAdapter.setClick { pos, month ->
+        calendarAdapter.setClick { pos, month, year ->
             viewmodel._otherDayChecked.value = pos
             viewmodel._otherMonthChecked.value = month
+            viewmodel._otherYearChecked.value = year
         }
         viewmodel._otherMonthChecked.observe(viewLifecycleOwner) {
-            if (it != calendarAdapter.curMonth) {
+            if (it != calendarAdapter.curMonth || calendarAdapter.curYear != viewmodel._otherYearChecked.value) {
                 calendarAdapter.checkedPosition = -1
                 calendarAdapter.notifyDataSetChanged()
             } else {

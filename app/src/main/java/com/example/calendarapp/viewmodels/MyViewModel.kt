@@ -10,4 +10,5 @@ class MyViewModel : ViewModel() {
     var _otherDayChecked = MutableLiveData<Int>(-1)
     private val otherDayChecked: LiveData<Int> = _otherDayChecked
     var _otherMonthChecked = MutableLiveData<Int>(-1)
+    var _otherYearChecked = MutableLiveData<Int>(-1)
 }

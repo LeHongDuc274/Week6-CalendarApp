@@ -10,6 +10,7 @@ class MyCalendar(date: Date) {
         const val MAX_WEEK_OF_MONTH = 6
     }
     var month = 0
+    var year = 0
     var startDay = 1
     val calendar = Calendar.getInstance()
     var dayOfPrevMonth = 0
@@ -26,6 +27,7 @@ class MyCalendar(date: Date) {
         dateList.clear()
         calendar.set(Calendar.DATE, 1)
         month = calendar[Calendar.MONTH]
+        year = calendar[Calendar.YEAR]
         dayOfCurrentMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
         if(calendar.get(Calendar.DAY_OF_WEEK) >= startDay) {
             dayOfPrevMonth = calendar.get(Calendar.DAY_OF_WEEK) - startDay // 1->7//sunday->satuday

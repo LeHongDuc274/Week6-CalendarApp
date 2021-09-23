@@ -24,9 +24,10 @@ class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
     RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
 
     lateinit var context: Context
-    var listener: ((Int, Int) -> Unit)? = null
+    var listener: ((Int, Int, Int) -> Unit)? = null
     var endCurMonth = 0
     var curMonth = -1
+    var curYear = -1
     var startCurMonth = 0
     var dateList = arrayListOf<DayInMonth>()
     var myCalendar = MyCalendar(date)
@@ -37,6 +38,7 @@ class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
         myCalendar.startDay = start
         myCalendar.initCalendar()
         curMonth = myCalendar.month
+        curYear = myCalendar.year
         dateList = myCalendar.dateList
         startCurMonth = myCalendar.dayOfPrevMonth
         endCurMonth = dateList.size - myCalendar.dayOfNextMonth - 1
@@ -75,7 +77,7 @@ class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
                 if (checkedPosition != mPos) {
                     checkedPosition = mPos
                     colorChecked = Color.GREEN
-                    listener?.invoke(mPos, curMonth)
+                    listener?.invoke(mPos, curMonth, curYear)
                     // Log.e ("SingleClick", checkedMonth.toString()+curMonth.toString())
                 }
             }
@@ -83,7 +85,7 @@ class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
             override fun onDoubleClickEvent(view: View?) {
                 if (checkedPosition != mPos) {
                     checkedPosition = mPos
-                    listener?.invoke(mPos, curMonth)
+                    listener?.invoke(mPos, curMonth, curYear)
                     colorChecked = Color.RED
                 }
             }
@@ -95,7 +97,7 @@ class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
         return dateList.size
     }
 
-    fun setClick(action: (Int, Int) -> Unit) {
+    fun setClick(action: (Int, Int, Int) -> Unit) {
         listener = action
     }
 
