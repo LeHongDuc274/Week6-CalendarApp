@@ -25,6 +25,4 @@ class FragmentCollectionAdapter(
         fragment.index = position
         return fragment
     }
-
-
 }

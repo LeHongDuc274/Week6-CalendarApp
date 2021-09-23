@@ -44,19 +44,34 @@ class MonthFragment() : Fragment() {
             calendarAdapter.notifyDataSetChanged()
            // Log.e("vm", it.toString())
         }
-        viewmodel._otherDayChecked.observe(viewLifecycleOwner){
-            if(it!=-1 && viewmodel._otherMonthChecked.value==calendarAdapter.curMonth){
-                calendarAdapter.checkedPosition = -1
-                calendarAdapter.notifyDataSetChanged()
-            }
-        }
+
         return view
     }
 
+//    override fun onResume() {
+//        super.onResume()
+//        calendarAdapter.notifyDataSetChanged()
+//    }
+    override fun onResume() {
+        super.onResume()
+        var pos = calendarAdapter.checkedPosition
+        if ( viewmodel._otherMonthChecked.value==calendarAdapter.curMonth){
+            calendarAdapter.checkedPosition = viewmodel._otherDayChecked.value!!
+             Log.e("checkstart", " " +viewmodel._otherDayChecked.value)
+            calendarAdapter.notifyItemChanged(calendarAdapter.checkedPosition)
+        } else {
+            calendarAdapter.checkedPosition = -1
+            calendarAdapter.notifyItemChanged(pos)
+        }
+    }
     override fun onPause() {
         super.onPause()
-        viewmodel._otherDayChecked.value = calendarAdapter.checkedPosition
-        viewmodel._otherMonthChecked.value = calendarAdapter.curMonth
+        if(calendarAdapter.checkedPosition!=-1
+        ) {
+            viewmodel._otherDayChecked.value = calendarAdapter.checkedPosition
+            viewmodel._otherMonthChecked.value = calendarAdapter.curMonth
+            Log.e("check", " " +viewmodel._otherDayChecked.value)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,6 +105,9 @@ class MonthFragment() : Fragment() {
         viewmodel._startDay.value?.let {
             calendarAdapter.setDayStart(it)
         }
+//        calendarAdapter.setItemClick {
+//
+//        }
         rvDayofMonth = view.findViewById<RecyclerView>(R.id.rv_day_of_month)
 
         val divider1 = DividerItemDecoration(activity, GridLayoutManager.HORIZONTAL)
