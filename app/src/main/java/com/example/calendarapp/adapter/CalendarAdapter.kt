@@ -22,13 +22,11 @@ import java.util.*
 
 class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
     RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
-    lateinit var context: Context
-    lateinit var viewModel: MyViewModel
 
-    // var listener : ((Int) -> Unit)? = null
+    lateinit var context: Context
+    var listener: ((Int, Int) -> Unit)? = null
     var endCurMonth = 0
     var curMonth = -1
-    var checkedMonth = -1
     var startCurMonth = 0
     var dateList = arrayListOf<DayInMonth>()
     var myCalendar = MyCalendar(date)
@@ -42,7 +40,6 @@ class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
         dateList = myCalendar.dateList
         startCurMonth = myCalendar.dayOfPrevMonth
         endCurMonth = dateList.size - myCalendar.dayOfNextMonth - 1
-        // Log.e("tagg",startCurMonth.toString() + "  " + endCurMonth.toString())
         notifyDataSetChanged()
     }
 
@@ -58,7 +55,7 @@ class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
         val tvDay = holder.itemView.findViewById<TextView>(R.id.tv_item_day)
         val height = llDayOfMonth.height / 6
 
-        var mPos = holder.adapterPosition
+        val mPos = holder.adapterPosition
         //setText
         tvDay.text = dateList[position].value.toString()
         tvDay.layoutParams.height = height
@@ -66,7 +63,7 @@ class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
         if (mPos < startCurMonth || mPos > endCurMonth) {
             tvDay.setTextAppearance(R.style.TextOtherMonth)
         } else tvDay.setTextAppearance(R.style.TextCurMonth)
-        if (checkedPosition == mPos ) {
+        if (checkedPosition == mPos) {
             holder.itemView.setBackgroundColor(colorChecked)
         } else {
             holder.itemView.setBackgroundColor(colorUnChecked)
@@ -75,33 +72,31 @@ class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
         //double click
         val doubleClick = DoubleClick(object : DoubleClickListener {
             override fun onSingleClickEvent(view: View?) {
-                notifyItemChanged(checkedPosition)
                 if (checkedPosition != mPos) {
                     checkedPosition = mPos
-
                     colorChecked = Color.GREEN
-                    notifyDataSetChanged()
-                   // Log.e ("SingleClick", checkedMonth.toString()+curMonth.toString())
+                    listener?.invoke(mPos, curMonth)
+                    // Log.e ("SingleClick", checkedMonth.toString()+curMonth.toString())
                 }
             }
 
             override fun onDoubleClickEvent(view: View?) {
-                notifyItemChanged(checkedPosition)
                 if (checkedPosition != mPos) {
                     checkedPosition = mPos
+                    listener?.invoke(mPos, curMonth)
                     colorChecked = Color.RED
-                    notifyItemChanged(mPos)
-                    //  Log.e("doubleClick", "y")
                 }
             }
         })
         holder.itemView.setOnClickListener(doubleClick)
-
     }
-
 
     override fun getItemCount(): Int {
         return dateList.size
+    }
+
+    fun setClick(action: (Int, Int) -> Unit) {
+        listener = action
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

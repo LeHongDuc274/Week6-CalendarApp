@@ -18,10 +18,8 @@ class MainActivity : FragmentActivity() {
     private lateinit var viewPager: ViewPager2
     private lateinit var toolbar: Toolbar
     private lateinit var viewmodel : MyViewModel
-    private lateinit var adapter: FragmentCollectionAdapter
-    private lateinit var localDate: LocalDate
+
     lateinit var fragmentCollectionAdapter : FragmentCollectionAdapter
-    var startDay = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,8 +66,7 @@ class MainActivity : FragmentActivity() {
                 }
                 R.id.sa -> {
                     viewmodel._startDay.value= 7
-//                    calendarAdapter.setDayStart(-2)
-//                    updateList()
+
                 }
             }
             true
