@@ -12,8 +12,16 @@
         <entry key="..\:/Trainning/W6/trainningW6/Week6-CalendarApp/app/src/main/res/layout/fragment_month.xml" value="0.2" />
         <entry key="..\:/Trainning/W6/trainningW6/Week6-CalendarApp/app/src/main/res/layout/item_day.xml" value="0.19947916666666668" />
         <entry key="..\:/Trainning/W6/trainningW6/Week6-CalendarApp/app/src/main/res/menu/menu_setting_start_day.xml" value="1.1928571428571428" />
+        <entry key="..\:/Trainning/calendar/Week6-CalendarApp/app/src/main/res/drawable/ic_baseline_calendar_today_24.xml" value="0.2453125" />
+        <entry key="..\:/Trainning/calendar/Week6-CalendarApp/app/src/main/res/drawable/ic_baseline_event_note_24.xml" value="0.2453125" />
+        <entry key="..\:/Trainning/calendar/Week6-CalendarApp/app/src/main/res/drawable/ic_baseline_sticky_note_2_24.xml" value="0.2453125" />
         <entry key="..\:/Trainning/calendar/Week6-CalendarApp/app/src/main/res/layout/activity_main.xml" value="0.13020833333333334" />
+        <entry key="..\:/Trainning/calendar/Week6-CalendarApp/app/src/main/res/layout/fragment_calendar.xml" value="0.11354166666666667" />
         <entry key="..\:/Trainning/calendar/Week6-CalendarApp/app/src/main/res/layout/fragment_month.xml" value="0.13020833333333334" />
+        <entry key="..\:/Trainning/calendar/Week6-CalendarApp/app/src/main/res/layout/fragment_notes.xml" value="0.11354166666666667" />
+        <entry key="..\:/Trainning/calendar/Week6-CalendarApp/app/src/main/res/layout/note_edit.xml" value="0.11354166666666667" />
+        <entry key="..\:/Trainning/calendar/Week6-CalendarApp/app/src/main/res/layout/note_item_layout.xml" value="0.11302083333333333" />
+        <entry key="..\:/Trainning/calendar/Week6-CalendarApp/app/src/main/res/menu/nav_menu.xml" value="0.11354166666666667" />
       </map>
     </option>
   </component>

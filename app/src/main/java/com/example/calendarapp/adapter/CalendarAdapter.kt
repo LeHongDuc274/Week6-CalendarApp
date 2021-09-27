@@ -25,6 +25,7 @@ class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
 
     lateinit var context: Context
     var listener: ((Int, Int, Int) -> Unit)? = null
+    var listener2 : ((Int,MyCalendar,Int)->Unit)? = null
     var endCurMonth = 0
     var curMonth = -1
     var curYear = -1
@@ -77,8 +78,7 @@ class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
                 if (checkedPosition != mPos) {
                     checkedPosition = mPos
                     colorChecked = Color.GREEN
-                    listener?.invoke(mPos, curMonth, curYear)
-                    // Log.e ("SingleClick", checkedMonth.toString()+curMonth.toString())
+                    listener2?.invoke(mPos,myCalendar,startCurMonth)
                 }
             }
 
@@ -99,6 +99,10 @@ class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
 
     fun setClick(action: (Int, Int, Int) -> Unit) {
         listener = action
+    }
+
+    fun setClick2(action:(Int, MyCalendar,Int)->Unit){
+        listener2 = action
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

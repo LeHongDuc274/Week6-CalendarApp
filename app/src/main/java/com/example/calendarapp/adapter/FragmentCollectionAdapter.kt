@@ -1,17 +1,12 @@
 package com.example.calendarapp.adapter
 
-import android.app.Activity
-import android.os.Bundle
-import android.util.Log
-import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.calendarapp.MonthFragment
-import com.example.calendarapp.R
+import com.example.calendarapp.fragment.MonthFragment
 
 class FragmentCollectionAdapter(
-    activity: FragmentActivity,
+    activity: FragmentActivity
 ) : FragmentStateAdapter(activity) {
     var fragment = MonthFragment()
     val firstElementPosition = Int.MAX_VALUE / 2

@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.calendarapp.models.DayInMonth
 import java.util.*
 
-class MyCalendar(date: Date) {
+class MyCalendar(val date: Date) {
     companion object {
         const val DAYS_OF_WEEK = 7
         const val MAX_WEEK_OF_MONTH = 6

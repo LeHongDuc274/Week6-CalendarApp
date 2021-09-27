@@ -1,22 +1,26 @@
-package com.example.calendarapp
+package com.example.calendarapp.fragment
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.calendarapp.R
 import com.example.calendarapp.adapter.CalendarAdapter
 import com.example.calendarapp.adapter.DayWeekAdapter
+import com.example.calendarapp.models.Note
 import com.example.calendarapp.viewmodels.MyViewModel
+import com.example.calendarapp.viewmodels.NoteViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,6 +33,7 @@ class MonthFragment() : Fragment() {
     lateinit var rvDayofMonth: RecyclerView
     lateinit var calendarAdapter: CalendarAdapter
     lateinit var viewmodel: MyViewModel
+    lateinit var noteViewModel: NoteViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,6 +41,9 @@ class MonthFragment() : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_month, container, false)
         viewmodel = ViewModelProvider(requireActivity())[MyViewModel::class.java]
+        noteViewModel = ViewModelProvider(
+            requireActivity(), NoteViewModel.NoteViewModelFactory(requireActivity().application)
+        )[NoteViewModel::class.java]
 
         initViewDayOfWeek(view)
         initViewCalendar(view)
@@ -47,10 +55,29 @@ class MonthFragment() : Fragment() {
     }
 
     private fun observeCheckedDay() {
-        calendarAdapter.setClick { pos, month, year ->
-            viewmodel._otherDayChecked.value = pos
-            viewmodel._otherMonthChecked.value = month
-            viewmodel._otherYearChecked.value = year
+        calendarAdapter.setClick2 { pos,myCalendar,startDay ->
+            val time = myCalendar.calendar
+            time.set(Calendar.DATE,pos-startDay+1)
+            val textTime = SimpleDateFormat("EEE, d MMM yyyy").format(time.time)
+            val builder = AlertDialog.Builder(activity)
+            val inflater = layoutInflater
+            val dialogLayout = inflater.inflate(R.layout.note_edit,null)
+            val edt = dialogLayout.findViewById<EditText>(R.id.edt_note)
+            with(builder){
+                setTitle(textTime)
+                setPositiveButton("Ok"){dialog,which ->
+                   // Toast.makeText(activity,time.time.toString(),Toast.LENGTH_SHORT).show()
+
+                    val note = Note(edt.text.toString(),time.time)
+                    noteViewModel.insertNote(note)
+                }
+                setNegativeButton("cancel"){dialog,which ->
+                    Toast.makeText(activity,"canceled",Toast.LENGTH_SHORT).show()
+                }
+                setView(dialogLayout)
+                show()
+            }
+
         }
         viewmodel._otherMonthChecked.observe(viewLifecycleOwner) {
             if (it != calendarAdapter.curMonth || calendarAdapter.curYear != viewmodel._otherYearChecked.value) {
