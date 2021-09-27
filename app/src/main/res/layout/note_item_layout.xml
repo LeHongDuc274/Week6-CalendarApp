@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="12dp"
     android:layout_marginBottom="12dp"
+    android:layout_marginHorizontal="24dp"
     android:orientation="vertical">
 
     <TextView
@@ -12,7 +13,7 @@
         android:id="@+id/tv_day_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="10sp" />
+        android:textSize="12sp" />
 
     <TextView
         android:ellipsize="end"

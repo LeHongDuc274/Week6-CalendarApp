@@ -5,7 +5,7 @@ import android.os.Looper
 import android.view.View
 
 open class DoubleClick(
-    private val doubleClickListenẻr: DoubleClickListener,
+    private val doubleClickListener: DoubleClickListener,
     private val timeDelay: Long = 200L
 ) : View.OnClickListener {
 
@@ -18,8 +18,8 @@ open class DoubleClick(
             isBusy = true
             countCLicks++
             handler.postDelayed({
-                if (countCLicks >= 2) doubleClickListenẻr.onDoubleClickEvent(v)
-                if (countCLicks == 1) doubleClickListenẻr.onSingleClickEvent(v)
+                if (countCLicks >= 2) doubleClickListener.onDoubleClickEvent(v)
+                if (countCLicks == 1) doubleClickListener.onSingleClickEvent(v)
             }, timeDelay)
             isBusy = false
         }

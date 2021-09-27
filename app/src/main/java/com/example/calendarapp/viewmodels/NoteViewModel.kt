@@ -1,10 +1,7 @@
 package com.example.calendarapp.viewmodels
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.calendarapp.models.Note
 import com.example.calendarapp.repositories.NoteRepository
 import kotlinx.coroutines.launch
@@ -30,8 +27,9 @@ class NoteViewModel(app: Application) : ViewModel() {
         repository.deletaAll()
     }
 
-    fun getAllNote(): LiveData<List<Note>> = repository.getAllNote()
-
+    fun getAllNote(): LiveData<List<Note>>{
+        return repository.getAllNote()
+    }
     class NoteViewModelFactory(val application: Application) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
