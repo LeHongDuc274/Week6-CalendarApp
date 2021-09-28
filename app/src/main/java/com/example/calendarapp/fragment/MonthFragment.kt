@@ -30,8 +30,9 @@ class MonthFragment() : Fragment() {
     var index: Int = 0
     var listDayWeek = arrayListOf<String>()
     lateinit var monthOfIndex: Calendar
-    var listPosition = listOf<Int>()
-    var listPositionAfter = listOf<Int>()
+    var listPositionChecked = listOf<Int>()
+    var listNoteOnMonth = listOf<Note>()
+
     lateinit var rvDayOfWeek: RecyclerView
     lateinit var dayWeekAdapter: DayWeekAdapter
     lateinit var rvDayofMonth: RecyclerView
@@ -59,76 +60,28 @@ class MonthFragment() : Fragment() {
     }
 
     private fun observeCheckedDay() {
-        calendarAdapter.setClick2 { pos, myCalendar, startDay ->
-            val time = myCalendar.calendar
-            time.set(Calendar.DATE, pos - startDay + 1)
-            val textTime = SimpleDateFormat("EEE, d MMM yyyy").format(time.time)
-            val builder = AlertDialog.Builder(activity)
-            val inflater = layoutInflater
-            val dialogLayout = inflater.inflate(R.layout.note_edit, null)
-            val edt = dialogLayout.findViewById<EditText>(R.id.edt_note)
-            with(builder) {
-                setTitle(textTime)
-                setPositiveButton("Ok") { dialog, which ->
-                    // Toast.makeText(activity,time.time.toString(),Toast.LENGTH_SHORT).show()
-                    val note = Note(edt.text.toString(), time.time)
-                    noteViewModel.insertNote(note)
-                }
-                setNegativeButton("cancel") { dialog, which ->
-                    //Log.e("cancle","duc")
-                }
-                setView(dialogLayout)
-                show()
-            }
-
-        }
-
+        onDoubleClickItem()
         noteViewModel.getAllNote().observe(viewLifecycleOwner, {
-            val listNoteOnMonth = it.filter { note ->
+            listNoteOnMonth = it.filter { note ->
                 fillterList(note)
             }
-            listPosition = listNoteOnMonth.map {
+            listPositionChecked = listNoteOnMonth.map {
                 mapList(it) + calendarAdapter.startCurMonth - 1
             }
-            //listPositionAfter = listPosition
-            calendarAdapter.setCheckPostion(listPosition)
-            //Log.e("tag2",listPosition.size.toString() + monthOfIndex.get(Calendar.MONTH) )
+            calendarAdapter.setCheckPostion(listPositionChecked)
         })
-        viewmodel._startDay.observe(viewLifecycleOwner) { it1 ->
-
-            val list = updateListChecked(listPosition,it1)
-            //  Log.e("tag3", listPosition.size.toString())
-            calendarAdapter.setCheckPostion(list)
-        }
     }
 
-    private fun updateListChecked(listPosition: List<Int>,it1:Int): List<Int> {
-        val list : List<Int>
-        val listTemp = listPosition.toList()
-        list = listTemp.map {
-            it1 - it
-        }
-        return list
-    }
-
-    private fun fillterList(note: Note): Boolean {
-        val calendar = Calendar.getInstance()
-        calendar.time = note.date
-        return (calendar.get(Calendar.MONTH) == monthOfIndex.get(Calendar.MONTH) &&
-                calendar.get(Calendar.YEAR) == monthOfIndex.get(Calendar.YEAR))
-    }
-
-    private fun mapList(note: Note): Int {
-        val calendar = Calendar.getInstance()
-        calendar.time = note.date
-        return calendar.get(Calendar.DATE)
-    }
 
     private fun observeStartDay() {
         viewmodel._startDay.observe(viewLifecycleOwner) { it1 ->
             updateList(it1)
             calendarAdapter.setDayStart(it1)
-
+            //change value foreach listchecked
+            listPositionChecked = listNoteOnMonth.map {
+                mapList(it) + calendarAdapter.startCurMonth - 1
+            }
+            calendarAdapter.setCheckPostion(listPositionChecked)
         }
 
     }
@@ -151,7 +104,6 @@ class MonthFragment() : Fragment() {
             add(Calendar.MONTH, index)
             time
         }
-
         val llDayOfMonth = view.findViewById<ConstraintLayout>(R.id.ll_day_of_month)
         val textMonth = SimpleDateFormat("MMMM yyyy").format(monthOfIndex.time)
         view.findViewById<TextView>(R.id.tv_month).text = textMonth.toString()
@@ -170,8 +122,42 @@ class MonthFragment() : Fragment() {
         }
     }
 
+    private fun onDoubleClickItem() {
+        calendarAdapter.setClick2 { pos, myCalendar, startDay ->
+            val time = myCalendar.calendar
+            time.set(Calendar.DATE, pos - startDay + 1)
+            val textTime = SimpleDateFormat("EEE, d MMM yyyy").format(time.time)
+            val builder = AlertDialog.Builder(activity)
+            val inflater = layoutInflater
+            val dialogLayout = inflater.inflate(R.layout.note_edit, null)
+            val edt = dialogLayout.findViewById<EditText>(R.id.edt_note)
+            with(builder) {
+                setTitle(textTime)
+                setPositiveButton("Save") { dialog, which ->
+                    val note = Note(edt.text.toString(), time.time)
+                    noteViewModel.insertNote(note)
+                }
+                setNegativeButton("Cancel") { dialog, which -> Unit }
+                setView(dialogLayout)
+                show()
+            }
+        }
+    }
 
-    fun updateList(startDay: Int = 1) {
+    private fun fillterList(note: Note): Boolean {
+        val calendar = Calendar.getInstance()
+        calendar.time = note.date
+        return (calendar.get(Calendar.MONTH) == monthOfIndex.get(Calendar.MONTH) &&
+                calendar.get(Calendar.YEAR) == monthOfIndex.get(Calendar.YEAR))
+    }
+
+    private fun mapList(note: Note): Int {
+        val calendar = Calendar.getInstance()
+        calendar.time = note.date
+        return calendar.get(Calendar.DATE)
+    }
+
+    private fun updateList(startDay: Int = 1) {
         val list1 = arrayListOf<String>()
         val list2 = arrayListOf<String>()
         for (i in 0 until (startDay - 1)) {
@@ -197,6 +183,4 @@ class MonthFragment() : Fragment() {
             add("Sa")
         }
     }
-
-
 }
