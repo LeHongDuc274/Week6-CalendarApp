@@ -1,6 +1,7 @@
 package com.example.calendarapp.models
 
 import androidx.room.*
+import java.io.Serializable
 import java.util.*
 
 @Entity(tableName = "note_table")
@@ -8,7 +9,7 @@ class Note(
     @ColumnInfo(name = "content") var content: String,
     @TypeConverters(Converters::class)
     var date: Date? = null
-) {
+):Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "note_id")
     var id: Int = 0

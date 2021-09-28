@@ -15,6 +15,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.example.calendarapp.adapter.FragmentCollectionAdapter
 import com.example.calendarapp.fragment.CalendarFragment
+import com.example.calendarapp.fragment.ConfigFragment
 import com.example.calendarapp.fragment.NotesFragment
 import com.example.calendarapp.viewmodels.MyViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -49,8 +50,18 @@ class MainActivity : FragmentActivity() {
             object : NavigationBarView.OnItemSelectedListener {
                 override fun onNavigationItemSelected(item: MenuItem): Boolean {
                     when (item.itemId) {
-                        R.id.notesFragment -> loadFragment(NotesFragment())
-                        R.id.calendarFragment -> loadFragment(CalendarFragment())
+                        R.id.notesFragment -> {
+                            loadFragment(NotesFragment())
+                            item.isChecked=true
+                        }
+                        R.id.calendarFragment -> {
+                            loadFragment(CalendarFragment())
+                            item.isChecked=true
+                        }
+                        R.id.configFragment -> {
+                            loadFragment(ConfigFragment())
+                            item.isChecked = true
+                        }
                     }
                     return false
                 }

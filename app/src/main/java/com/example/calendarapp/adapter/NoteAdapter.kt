@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat
 
 class NoteAdapter : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
     var listNotes = listOf<Note>()
+    private var click : ((Note) -> Unit)? = null
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -31,6 +32,9 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
             holder.itemView.findViewById<TextView>(R.id.tv_day_note).text = position.toString() + ") " +
                 SimpleDateFormat("EEE, d MMM yyyy").format(listNotes[position].date)
         }
+        holder.itemView.setOnClickListener {
+            click?.invoke(listNotes[position])
+        }
     }
     override fun getItemCount(): Int {
         return listNotes.size
@@ -39,5 +43,8 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
     fun setListNote(list: List<Note>) {
         listNotes = list
         notifyDataSetChanged()
+    }
+    fun clickItem(action:(Note)->Unit){
+        click= action
     }
 }
