@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -29,16 +31,13 @@ class MainActivity : FragmentActivity() {
     private lateinit var toolbar: Toolbar
     private lateinit var viewmodel: MyViewModel
     lateinit var navBottom: BottomNavigationView
-    lateinit var navHostFragment: NavHostFragment
-    lateinit var navController: NavController
 
-    lateinit var fragmentCollectionAdapter: FragmentCollectionAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setupBottomView()
-        loadFragment(NotesFragment())
+        loadFragment(NotesFragment(), "1")
         viewmodel = ViewModelProvider(this)[MyViewModel::class.java]
         toolbar = findViewById(R.id.tool_bar_main)
         setupMenu(toolbar)
@@ -46,33 +45,35 @@ class MainActivity : FragmentActivity() {
 
     private fun setupBottomView() {
         navBottom = findViewById(R.id.bottom_bar)
+
         navBottom.setOnItemSelectedListener(
             object : NavigationBarView.OnItemSelectedListener {
                 override fun onNavigationItemSelected(item: MenuItem): Boolean {
                     when (item.itemId) {
                         R.id.notesFragment -> {
-                            loadFragment(NotesFragment())
-                            item.isChecked=true
+                            loadFragment(NotesFragment(), "1")
+                            return true
                         }
                         R.id.calendarFragment -> {
-                            loadFragment(CalendarFragment())
-                            item.isChecked=true
+                            loadFragment(CalendarFragment(), "2")
+                            return true
                         }
                         R.id.configFragment -> {
-                            loadFragment(ConfigFragment())
-                            item.isChecked = true
+                            loadFragment(ConfigFragment(), "3")
+                            return true
                         }
                     }
                     return false
                 }
+
             }
         )
     }
 
-    private fun loadFragment(fragment: Fragment) {
+    private fun loadFragment(fragment: Fragment, tag: String) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container_view, fragment)
-        transaction.addToBackStack(null)
+        transaction.addToBackStack(tag)
         transaction.commit()
     }
 
@@ -89,7 +90,7 @@ class MainActivity : FragmentActivity() {
                 }
                 R.id.tu -> {
                     viewmodel._startDay.value = 3
-                    Log.e("viewmodel", viewmodel._startDay.value.toString())
+                    //  Log.e("viewmodel", viewmodel._startDay.value.toString())
                 }
                 R.id.we -> {
                     viewmodel._startDay.value = 4
@@ -108,6 +109,29 @@ class MainActivity : FragmentActivity() {
                 }
             }
             true
+        }
+    }
+
+    override fun onBackPressed() {
+        val selectedItemId = navBottom.selectedItemId
+        val count = supportFragmentManager.backStackEntryCount
+        if (count > 1) {
+            if (selectedItemId != R.id.notesFragment) {
+                supportFragmentManager.popBackStack("1", POP_BACK_STACK_INCLUSIVE)
+                navBottom.selectedItemId = R.id.notesFragment
+            } else super.onBackPressed()
+        } else {
+            AlertDialog.Builder(this)
+                .setMessage("Are you sure exit app?")
+                .setCancelable(false)
+                .setPositiveButton(
+                    "Yes"
+                ) { _, _ ->
+                    finish()
+                }
+                .setNegativeButton("No", null)
+                .create()
+                .show()
         }
     }
 }
