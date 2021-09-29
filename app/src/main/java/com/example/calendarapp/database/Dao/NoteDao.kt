@@ -2,6 +2,7 @@ package com.example.calendarapp.database.Dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.example.calendarapp.models.Note
 
 @Dao
@@ -21,4 +22,6 @@ interface NoteDao {
 
     @Query("delete from note_table")
     suspend fun deleteAll()
+    @RawQuery
+    fun insertDataRawFormat(query: SupportSQLiteQuery): Boolean?
 }

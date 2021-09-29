@@ -122,6 +122,7 @@ class MonthFragment() : Fragment() {
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun onDoubleClickItem() {
         calendarAdapter.setClick2 { pos, myCalendar, startDay ->
             val time = myCalendar.calendar
@@ -146,9 +147,9 @@ class MonthFragment() : Fragment() {
 
     private fun fillterList(note: Note): Boolean {
         val calendar = Calendar.getInstance()
-        calendar.time = note.date
-        return (calendar.get(Calendar.MONTH) == monthOfIndex.get(Calendar.MONTH) &&
-                calendar.get(Calendar.YEAR) == monthOfIndex.get(Calendar.YEAR))
+            calendar.time = note.date
+            return (calendar.get(Calendar.MONTH) == monthOfIndex.get(Calendar.MONTH) &&
+                    calendar.get(Calendar.YEAR) == monthOfIndex.get(Calendar.YEAR))
     }
 
     private fun mapList(note: Note): Int {

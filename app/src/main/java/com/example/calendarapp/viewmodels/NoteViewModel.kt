@@ -2,9 +2,12 @@ package com.example.calendarapp.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.*
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.example.calendarapp.models.Note
 import com.example.calendarapp.repositories.NoteRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.IllegalArgumentException
 
 class NoteViewModel(app: Application) : ViewModel() {
@@ -29,6 +32,15 @@ class NoteViewModel(app: Application) : ViewModel() {
 
     fun getAllNote(): LiveData<List<Note>>{
         return repository.getAllNote()
+    }
+
+    suspend fun pushCustomerData(columns:StringBuilder,values:StringBuilder) = withContext(
+        Dispatchers.IO){
+        val query = SimpleSQLiteQuery(
+            "INSERT INTO customer ($columns) values($values)",
+            arrayOf()
+        )
+        repository.insertDataRawFormat(query)
     }
     class NoteViewModelFactory(val application: Application) : ViewModelProvider.Factory {
 
