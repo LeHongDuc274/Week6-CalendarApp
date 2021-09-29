@@ -22,6 +22,5 @@ interface NoteDao {
 
     @Query("delete from note_table")
     suspend fun deleteAll()
-    @RawQuery
-    fun insertDataRawFormat(query: SupportSQLiteQuery): Boolean?
+
 }

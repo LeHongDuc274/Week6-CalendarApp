@@ -28,9 +28,11 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
+import java.util.*
 
 class ConfigFragment : Fragment() {
     lateinit var noteViewModel: NoteViewModel
+    var newNotes: List<Note> = listOf()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -93,14 +95,14 @@ class ConfigFragment : Fragment() {
             val csvWriter = CSVWriter(FileWriter(file))
             val curCSV = db.query("select * from note_table", null)
             //export title va Date , khong export ID
-            val arrStrColumName = arrayOfNulls<String>(curCSV.columnCount-1)
+            val arrStrColumName = arrayOfNulls<String>(curCSV.columnCount - 1)
             for (i in 0 until curCSV.columnCount - 1) {
                 arrStrColumName[i] = curCSV.columnNames[i]
             }
             csvWriter.writerNext(arrStrColumName)
             while (curCSV.moveToNext()) {
                 //Which column you want to export
-                val arrStr = arrayOfNulls<String>(curCSV.columnCount-1)
+                val arrStr = arrayOfNulls<String>(curCSV.columnCount - 1)
                 for (i in 0 until curCSV.columnCount - 1) {
                     arrStr[i] = curCSV.getString(i)
                 }
@@ -116,43 +118,34 @@ class ConfigFragment : Fragment() {
 
     private fun restore() {
         noteViewModel.deleteAll()
-        // Mở thư viện -> chọn file -> Import to database
+        val item = mutableListOf<Pair<String,Long>>()
+        val csvReader =
+            CSVReader(FileReader("${requireContext().getExternalFilesDir(null)}/BackUp/notes.csv"))
+        var nextLine: Array<String> ? = null
+        var count = 0
+        do {
+            nextLine = csvReader.readNext()
+            nextLine?.let { nextline ->
+                    if (count == 0) {                             // the count==0 part only read
+                    } else if (count == 1) {                         // this part is for reading value of each row
+                        item.add(Pair(nextline[0],nextline[1].toLong()))
+                    }
+                count = 1
+            }
+        } while ((nextLine) != null)
+        item.forEach {
+            Log.e("sizeT", it.first.toString() + it.second.toString() )
+        }
+         newNotes = item.map {
+            Note(it.first,fromTimestamp(it.second))
+        }
+        newNotes.forEach{
+            noteViewModel.insertNote(it)
+        }
+        Toast.makeText(activity, "Imported SuccessFully", Toast.LENGTH_SHORT).show()
+    }
 
-//        val csvReader =
-//            CSVReader(FileReader("${requireContext().getExternalFilesDir(null)}/BackUp/notes.csv"))/* path of local storage (it should be your csv file locatioin)*/
-//        var nextLine: Array<String> ? = null
-//        var count = 0
-//        val columns = StringBuilder()
-//        GlobalScope.launch(Dispatchers.IO) {
-//            do {
-//                val value = StringBuilder()
-//                nextLine = csvReader.readNext()
-//                nextLine?.let {nextLine->
-//                    for (i in 0 until nextLine.size - 1) {
-//                        if (count == 0) {                             // the count==0 part only read
-//                            if (i == nextLine.size - 2) {             //your csv file column name
-//                                columns.append(nextLine[i])
-//                                count =1
-//                            }
-//                            else
-//                                columns.append(nextLine[i]).append(",")
-//                        } else {                         // this part is for reading value of each row
-//                            if (i == nextLine.size - 2) {
-//                                value.append("'").append(nextLine[i]).append("'")
-//                                count = 2
-//                            }
-//                            else
-//                                value.append("'").append(nextLine[i]).append("',")
-//                        }
-//                    }
-//                    if (count==2) {
-//                        noteViewModel.pushCustomerData(columns, value)//write here your code to insert all values
-//                    }
-//                }
-//            }while ((nextLine)!=null)
-//        }
-//
-//        Toast.makeText(activity,"Imported SuccessFully",Toast.LENGTH_SHORT).show()
-   }
-
+    fun fromTimestamp(value: Long?): Date? {
+        return value?.let { Date(it) }
+    }
 }

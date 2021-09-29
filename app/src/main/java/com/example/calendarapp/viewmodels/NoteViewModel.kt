@@ -34,14 +34,7 @@ class NoteViewModel(app: Application) : ViewModel() {
         return repository.getAllNote()
     }
 
-    suspend fun pushCustomerData(columns:StringBuilder,values:StringBuilder) = withContext(
-        Dispatchers.IO){
-        val query = SimpleSQLiteQuery(
-            "INSERT INTO customer ($columns) values($values)",
-            arrayOf()
-        )
-        repository.insertDataRawFormat(query)
-    }
+
     class NoteViewModelFactory(val application: Application) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {

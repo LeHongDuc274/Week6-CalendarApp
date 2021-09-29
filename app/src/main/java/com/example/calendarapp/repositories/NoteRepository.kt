@@ -20,6 +20,5 @@ class NoteRepository(app: Application) {
     suspend fun deleteNote(note:Note) = noteDao.deleteNote(note)
     suspend fun updateNote(note:Note) = noteDao.updateNote(note)
     suspend fun deletaAll() = noteDao.deleteAll()
-    fun insertDataRawFormat(query: SupportSQLiteQuery): Boolean?  = noteDao.insertDataRawFormat(query)
     fun getAllNote() : LiveData<List<Note>> = noteDao.getAllNote()
 }
