@@ -30,7 +30,7 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
             listNotes[position].content
         if (listNotes[position].date != null) {
             holder.itemView.findViewById<TextView>(R.id.tv_day_note).text = position.toString() + ") " +
-                SimpleDateFormat("EEE, d MMM yyyy").format(listNotes[position].date)
+                SimpleDateFormat("EEE, d MMM yyyy").format(listNotes[position].date!!)
         }
         holder.itemView.setOnClickListener {
             click?.invoke(listNotes[position])

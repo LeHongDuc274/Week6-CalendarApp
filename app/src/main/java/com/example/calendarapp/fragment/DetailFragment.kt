@@ -1,5 +1,6 @@
 package com.example.calendarapp.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,9 +24,11 @@ class DetailFragment : Fragment() {
         return view
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun setUpView(args: Note?, view: View) {
-        view.findViewById<TextView>(R.id.tv_content).text = args?.content
         if (args != null) {
+        view.findViewById<TextView>(R.id.tv_content).text = args.content
+
             view.findViewById<TextView>(R.id.tv_time).text = SimpleDateFormat("EEE, d MMM yyyy").format(args.date)
         }
     }

@@ -25,7 +25,7 @@ class CalendarAdapter(val date: Date, val llDayOfMonth: ConstraintLayout) :
     var dateList = arrayListOf<DayInMonth>()
     var myCalendar = MyCalendar(date)
     var checkedPosition = listOf<Int>()
-    var colorChecked = Color.GREEN
+    var colorChecked = Color.CYAN
     var colorUnChecked = Color.WHITE
     fun setDayStart(start: Int) {
         myCalendar.startDay = start

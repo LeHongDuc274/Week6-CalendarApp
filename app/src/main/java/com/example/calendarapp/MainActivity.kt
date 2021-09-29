@@ -119,7 +119,7 @@ class MainActivity : FragmentActivity() {
             if (selectedItemId != R.id.notesFragment) {
                 supportFragmentManager.popBackStack("1", POP_BACK_STACK_INCLUSIVE)
                 navBottom.selectedItemId = R.id.notesFragment
-            } else super.onBackPressed()
+            }  else super.onBackPressed()
         } else {
             AlertDialog.Builder(this)
                 .setMessage("Are you sure exit app?")

@@ -1,6 +1,7 @@
 package com.example.calendarapp.fragment
 
 import android.app.AlertDialog
+import android.content.res.Resources
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -56,11 +57,16 @@ class NotesFragment : Fragment() {
         rv_notes.setHasFixedSize(true)
         rv_notes.layoutManager = LinearLayoutManager(activity)
         rv_notes.adapter = adapter
+
         noteViewModel.getAllNote().observe(viewLifecycleOwner, Observer {
             adapter.setListNote(it)
             list = it.toList()
+            if(it.size==0){
+                Toast.makeText(activity,"Hiện tại chưa có Note nào @@",Toast.LENGTH_LONG).show()
+            }
         })
         val divider = DividerItemDecoration(activity, GridLayoutManager.VERTICAL)
+
         rv_notes.addItemDecoration(divider)
     }
 
@@ -91,10 +97,12 @@ class NotesFragment : Fragment() {
         with(builder) {
             setTitle("Search Content")
             setPositiveButton("Search") { dialog, which ->
-                fab.hide()
-                back.show()
+
                 val keyword = edt.text.toString()
-                search(keyword)
+                if(search(keyword)){
+                    fab.hide()
+                    back.show()
+                }
             }
             setNegativeButton("Cancel") { dialog, which -> Unit }
             setView(dialogLayout)
@@ -102,11 +110,17 @@ class NotesFragment : Fragment() {
         }
     }
 
-    private fun search(keyword: String) {
-        val listTemp = list.filter { note->
-            note.content.contains(keyword,ignoreCase = false)
+    private fun search(keyword: String) :Boolean {
+        val listTemp = list.filter { note ->
+            note.content.contains(keyword, ignoreCase = false)
         }
-       // Toast.makeText(activity,list.sizeTemp.toString(),Toast.LENGTH_SHORT).show()
-        adapter.setListNote(listTemp)
+        // Toast.makeText(activity,list.sizeTemp.toString(),Toast.LENGTH_SHORT).show()
+        if (listTemp.size == 0) {
+            Toast.makeText(activity, "Không tìm thấy kết quả phù hợp", Toast.LENGTH_SHORT).show()
+            return false
+        } else {
+            adapter.setListNote(listTemp)
+            return true
+        }
     }
 }
