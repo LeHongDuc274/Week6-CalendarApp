@@ -1,12 +1,9 @@
 package com.example.calendarapp.fragment
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
-import android.os.Environment.getExternalStorageDirectory
+import android.os.Environment
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,9 +19,6 @@ import com.example.calendarapp.models.Note
 import com.example.calendarapp.others.CSVReader
 import com.example.calendarapp.others.CSVWriter
 import com.example.calendarapp.viewmodels.NoteViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
@@ -63,14 +57,11 @@ class ConfigFragment : Fragment() {
                 show()
             }
         }
-        view.findViewById<TextView>(R.id.tv_backup).setOnClickListener {
-            backup()
-        }
-        view.findViewById<TextView>(R.id.tv_restore).setOnClickListener {
-            restore()
-        }
+        view.findViewById<TextView>(R.id.tv_backup)
+            .setOnClickListener { if (isExternalStorageWritable()) backup() }
+        view.findViewById<TextView>(R.id.tv_restore)
+            .setOnClickListener { if (isExternalStorageReadable()) restore() }
     }
-
 
     private fun saveRefs(value: String) {
         if (value.length >= 6) {
@@ -101,7 +92,6 @@ class ConfigFragment : Fragment() {
             }
             csvWriter.writerNext(arrStrColumName)
             while (curCSV.moveToNext()) {
-                //Which column you want to export
                 val arrStr = arrayOfNulls<String>(curCSV.columnCount - 1)
                 for (i in 0 until curCSV.columnCount - 1) {
                     arrStr[i] = curCSV.getString(i)
@@ -118,34 +108,44 @@ class ConfigFragment : Fragment() {
 
     private fun restore() {
         noteViewModel.deleteAll()
-        val item = mutableListOf<Pair<String,Long>>()
+        val item = mutableListOf<Pair<String, Long>>()
+        //Log.e( "tt", requireContext().getExternalFilesDir(null).toString())
         val csvReader =
             CSVReader(FileReader("${requireContext().getExternalFilesDir(null)}/BackUp/notes.csv"))
-        var nextLine: Array<String> ? = null
+        var nextLine: Array<String>? = null
         var count = 0
         do {
             nextLine = csvReader.readNext()
             nextLine?.let { nextline ->
-                    if (count == 0) {                             // the count==0 part only read
-                    } else if (count == 1) {                         // this part is for reading value of each row
-                        item.add(Pair(nextline[0],nextline[1].toLong()))
-                    }
+                if (count == 0) {                             // count==0 ->Unit ->nẽtLine
+                } else if (count == 1) {
+                    item.add(Pair(nextline[0], nextline[1].toLong()))
+                }
                 count = 1
             }
         } while ((nextLine) != null)
-        item.forEach {
-            Log.e("sizeT", it.first.toString() + it.second.toString() )
+        csvReader.close()
+
+        newNotes = item.map {
+            Note(it.first, fromTimestamp(it.second))
         }
-         newNotes = item.map {
-            Note(it.first,fromTimestamp(it.second))
-        }
-        newNotes.forEach{
+        newNotes.forEach {
             noteViewModel.insertNote(it)
         }
         Toast.makeText(activity, "Imported SuccessFully", Toast.LENGTH_SHORT).show()
     }
 
-    fun fromTimestamp(value: Long?): Date? {
+    private fun fromTimestamp(value: Long?): Date? {
         return value?.let { Date(it) }
     }
+
+    fun isExternalStorageWritable(): Boolean {
+        return Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED
+    }
+
+    fun isExternalStorageReadable(): Boolean {
+        return Environment.getExternalStorageState() in
+                setOf(Environment.MEDIA_MOUNTED, Environment.MEDIA_MOUNTED_READ_ONLY)
+    }
+
 }
