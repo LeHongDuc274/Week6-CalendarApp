@@ -1,30 +1,20 @@
 package com.example.calendarapp.others
 
+import android.util.Log
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.Reader
 
-class CSVReader
-
-@JvmOverloads constructor(
-    reader: Reader,
-    private val separator: Char = DEFAULT_SEPARATOR,
-    private val quotechar: Char = DEFAULT_QUOTE_CHARACTER,
-    private val skipLines: Int = DEFAULT_SKIP_LINES
-) {
+class CSVReader(reader: Reader) {
+    private val separator: Char = ','
+    private val quotechar: Char = '"'
     private val br: BufferedReader = BufferedReader(reader)
+
     private var hasNext = true
-    private var linesSkiped: Boolean = false
 
     private val nextLine: String?
         @Throws(IOException::class)
         get() {
-            if (!this.linesSkiped) {
-                for (i in 0 until skipLines) {
-                    br.readLine()
-                }
-                this.linesSkiped = true
-            }
             val nextLine = br.readLine()
             if (nextLine == null) {
                 hasNext = false
@@ -41,6 +31,7 @@ class CSVReader
     @Throws(IOException::class)
     private fun parseLine(nextLine: String?): Array<String>? {
         var nextLine: String? = nextLine ?: return null
+        // eg. next line = "le "h" du,c\n suti" , "12333"
         val tokensOnThisLine = ArrayList<String>()
         var sb = StringBuffer()
         var inQuotes = false
@@ -53,33 +44,33 @@ class CSVReader
             }
             var i = 0
             while (i < nextLine!!.length) {
-
                 val c = nextLine[i]
+                // start quote
                 if (c == quotechar) {
-
-                    if (inQuotes
-                        && nextLine.length > i + 1
+                    if (nextLine.length > i + 1
                         && nextLine[i + 1] == quotechar
                     ) {
                         sb.append(nextLine[i + 1])
                         i++
+                        //Log.e()
                     } else {
                         inQuotes = !inQuotes
                         if (i > 2
-
                             && nextLine[i - 1] != this.separator
-
-                            && nextLine.length > i + 1 &&
-                            nextLine[i + 1] != this.separator
+                            && nextLine.length > i + 1
+                            && nextLine[i + 1] != this.separator
                         ) {
                             sb.append(c)
                         }
                     }
-                } else if (c == separator && !inQuotes) {
+                } else if (c == separator && !inQuotes) { // end quote
                     tokensOnThisLine.add(sb.toString())
-                    sb = StringBuffer()
+                    sb = StringBuffer() // next token
                 } else {
-                    sb.append(c)
+                    if (nextLine[i] == '\\' && nextLine[i + 1] == 'n') {
+                        sb.append("\n")
+                        i++
+                    } else sb.append(c)
                 }
                 i++
             }
@@ -87,15 +78,9 @@ class CSVReader
         tokensOnThisLine.add(sb.toString())
         return tokensOnThisLine.toTypedArray()
     }
-
     @Throws(IOException::class)
     fun close() {
         br.close()
     }
 
-    companion object {
-        val DEFAULT_SEPARATOR = ','
-        val DEFAULT_QUOTE_CHARACTER = '"'
-        val DEFAULT_SKIP_LINES = 0
-    }
 }

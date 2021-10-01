@@ -18,6 +18,7 @@ import com.example.calendarapp.database.NoteDatabase
 import com.example.calendarapp.models.Note
 import com.example.calendarapp.others.CSVReader
 import com.example.calendarapp.others.CSVWriter
+
 import com.example.calendarapp.viewmodels.NoteViewModel
 import java.io.File
 import java.io.FileReader
@@ -74,6 +75,7 @@ class ConfigFragment : Fragment() {
         } else Toast.makeText(activity, "PassWord  < 6 Charator,Fail", Toast.LENGTH_SHORT).show()
     }
 
+
     private fun backup() {
         val db = NoteDatabase.getInstance(requireContext())
         val exportDir = File(requireContext().getExternalFilesDir(null), "/BackUp")
@@ -85,7 +87,6 @@ class ConfigFragment : Fragment() {
             file.createNewFile()
             val csvWriter = CSVWriter(FileWriter(file))
             val curCSV = db.query("select * from note_table", null)
-            //export title va Date , khong export ID
             val arrStrColumName = arrayOfNulls<String>(curCSV.columnCount - 1)
             for (i in 0 until curCSV.columnCount - 1) {
                 arrStrColumName[i] = curCSV.columnNames[i]
@@ -102,7 +103,7 @@ class ConfigFragment : Fragment() {
             curCSV.close()
             Toast.makeText(activity, "Exported SuccessFully", Toast.LENGTH_SHORT).show()
         } catch (sqlEx: Exception) {
-            Log.e("sqlEx", sqlEx.toString())
+            Toast.makeText(activity, sqlEx.toString(), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -110,29 +111,34 @@ class ConfigFragment : Fragment() {
         noteViewModel.deleteAll()
         val item = mutableListOf<Pair<String, Long>>()
         //Log.e( "tt", requireContext().getExternalFilesDir(null).toString())
-        val csvReader =
-            CSVReader(FileReader("${requireContext().getExternalFilesDir(null)}/BackUp/notes.csv"))
         var nextLine: Array<String>? = null
         var count = 0
-        do {
-            nextLine = csvReader.readNext()
-            nextLine?.let { nextline ->
-                if (count == 0) {                             // count==0 ->Unit ->nẽtLine
-                } else if (count == 1) {
-                    item.add(Pair(nextline[0], nextline[1].toLong()))
+        try {
+            val csvReader =
+                CSVReader(FileReader("${requireContext().getExternalFilesDir(null)}/BackUp/notes.csv"))
+            do {
+                nextLine = csvReader.readNext()
+                nextLine?.let { nextline ->
+                    if (count == 0) {                             // count==0 ->Unit ->nẽtLine
+                    } else if (count == 1) {
+                        item.add(Pair(nextline[0], nextline[1].toLong()))
+                    }
+                    count = 1
+                  //  Log.e("arr",nextLine[0] + " "+ nextLine[1])
                 }
-                count = 1
-            }
-        } while ((nextLine) != null)
-        csvReader.close()
+            } while ((nextLine) != null)
+            csvReader.close()
 
-        newNotes = item.map {
-            Note(it.first, fromTimestamp(it.second))
+            newNotes = item.map {
+                Note(it.first, fromTimestamp(it.second))
+            }
+            newNotes.forEach {
+                noteViewModel.insertNote(it)
+            }
+            Toast.makeText(activity, "Imported SuccessFully", Toast.LENGTH_SHORT).show()
+        } catch (fileEx: Exception) {
+            Toast.makeText(activity, fileEx.toString(), Toast.LENGTH_SHORT).show()
         }
-        newNotes.forEach {
-            noteViewModel.insertNote(it)
-        }
-        Toast.makeText(activity, "Imported SuccessFully", Toast.LENGTH_SHORT).show()
     }
 
     private fun fromTimestamp(value: Long?): Date? {
