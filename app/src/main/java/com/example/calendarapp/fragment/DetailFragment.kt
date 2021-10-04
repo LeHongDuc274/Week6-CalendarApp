@@ -63,7 +63,7 @@ class DetailFragment : Fragment() {
         args?.let {
             viewmodel.deleteNote(it)
             activity?.supportFragmentManager?.popBackStack()
-            Toast.makeText(activity, "Update SuccesFully", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "Delete SuccesFully", Toast.LENGTH_SHORT).show()
         }
     }
 
